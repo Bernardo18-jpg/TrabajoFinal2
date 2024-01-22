@@ -25,16 +25,40 @@ struct Turnos
     char detalles[380];
 };
 
-void pacientes(FILE *arch, Pacientes pac, fecha fec);
+struct Profesionales
+{
+    char apenom[60], tel[25];
+    int dni, IdProf;
+};
+
+void pacientes(FILE *Parch, Pacientes pac, fecha fec);
+void turnoss(FILE *Tarch, FILE *Parch, FILE *Prof, Pacientes pac, fecha fec, Turnos tur, Profesionales pro);
+void listado(FILE *Prof, FILE *Tarch, Profesionales pro, Turnos tur);
 
 main()
 {
-    FILE *arch;
+    FILE *Parch, *Tarch, *Prof;
     int opcion;
     Pacientes pac;
+    Turnos tur;
+    Profesionales pro;
     fecha fec;
-    arch = fopen("Pacientes.dat", "a+b");
-    if (arch == NULL)
+    Parch = fopen("Pacientes.dat", "a+b");
+    if (Parch == NULL)
+    {
+        printf("\nError al abrir el archivo\n");
+        exit(1);
+    }
+
+    Tarch = fopen("Turnos.dat", "a+b");
+    if (Tarch == NULL)
+    {
+        printf("\nError al abrir el archivo\n");
+        exit(1);
+    }
+
+    Prof = fopen("Profesionales.dat", "rb");
+    if (Prof == NULL)
     {
         printf("\nError al abrir el archivo\n");
         exit(1);
@@ -47,7 +71,7 @@ main()
         printf("\n\n\t========================");
         printf("\n\n\t1. Iniciar sesion");
         printf("\n\n\t2. Registrar Pacientes");
-        printf("\n\n\t3. Registrar Turnos");
+        printf("\n\n\t3. Agendar Turnos");
         printf("\n\n\t4. Listado de Atenciones por Profesional y Fecha");
         printf("\n\n\t5. SALIR");
         printf("\n\n\tINGRESE SU OPCION: ");
@@ -61,15 +85,15 @@ main()
         case 2:
             system("cls");
             printf("\tRegistrar Pacientes");
-            pacientes(arch, pac, fec);
-
+            pacientes(Parch, pac, fec);
             break;
         case 3:
             system("cls");
-            printf("\nOPCION 3");
+            printf("\tAgendar Turnos");
+            turnoss(Tarch, Parch, Prof, pac, fec, tur, pro);
             break;
         case 4:
-            printf("\nOPCION 4");
+            listado(Prof, Tarch, pro, tur);
             break;
         case 5:
             printf("\n\nUsted esta cerrando la aplicacion...\n");
@@ -81,15 +105,16 @@ main()
         printf("\n\n");
         system("pause");
     } while (opcion != 5);
+    fclose(Parch);
+    fclose(Tarch);
 }
 
-void pacientes(FILE *arch, Pacientes pac, fecha fec)
+void pacientes(FILE *Parch, Pacientes pac, fecha fec)
 {
-    int sino=0;
-    fwrite(&pac, sizeof(Pacientes), 1, arch);
+    int sino = 0;
+    fwrite(&pac, sizeof(Pacientes), 1, Parch);
     do
     {
-        _flushall();
         printf("\n\n\tIngreso de datos del paciente:\n\n");
         printf("Apellido y Nombre: ");
         gets(pac.apenom);
@@ -98,7 +123,7 @@ void pacientes(FILE *arch, Pacientes pac, fecha fec)
         printf("DNI: ");
         scanf("%d", &pac.dni);
         _flushall();
-        printf("Localidad en la que reside:");
+        printf("Localidad en la que reside: ");
         gets(pac.locali);
         printf("Fecha de Nacimiento (dd/mm/aaaa): ");
         do
@@ -131,12 +156,143 @@ void pacientes(FILE *arch, Pacientes pac, fecha fec)
         _flushall();
         printf("Numero de telefono: ");
         gets(pac.tel);
-        fwrite(&pac, sizeof(Pacientes), 1, arch);
-        do{
-            printf("\nDesea agregar otro paciente? (1 = Si/0 = No)"); scanf("%d",&sino);
-            if(sino > 1 || sino < 0){
+        fwrite(&pac, sizeof(Pacientes), 1, Parch);
+        do
+        {
+            printf("\nDesea agregar otro paciente? (1 = Si/0 = No)");
+            scanf("%d", &sino);
+            _flushall();
+            if (sino > 1 || sino < 0)
+            {
                 printf("Ingrese una opcion correcta...\n");
             }
-        }while (sino > 1 || sino < 0);
+        } while (sino > 1 || sino < 0);
     } while (sino == 1);
+}
+
+void turnoss(FILE *Tarch, FILE *Parch, FILE *Prof, Pacientes pac, fecha fec, Turnos tur, Profesionales pro)
+{
+    int sino = 0, b = 0;
+    fwrite(&tur, sizeof(Turnos), 1, Tarch);
+    do
+    {
+        printf("\n\n\tCarga de un Turno:\n\n");
+        do
+        {
+            printf("ID del Profesional: ");
+            scanf("%d", &tur.idProf);
+            fseek(Prof, sizeof(Profesionales), SEEK_SET);
+            fread(&pro, sizeof(Profesionales), 1, Prof);
+            while (!feof(Prof) && b == 0)
+            {
+                if (tur.idProf == pro.IdProf)
+                {
+                    printf("\n\tBUSCANDO DATOS DEL PROFESIONAL \n");
+                    system("pause");
+                    printf("Nombre: %s", pro.apenom);
+                    b = 1;
+                }
+                fread(&pro, sizeof(Profesionales), 1, Prof);
+            }
+            if (b == 0)
+            {
+                printf("\n\tBUSCANDO DATOS DEL PROFESIONAL \n");
+                system("pause");
+                printf("NO SE ENCONTRO EL PROFESIONAL...\n");
+                printf("Corregir el ID...\n");
+            }
+        } while (b == 0);
+        printf("\nFecha del turno (dd/mm/aaaa): ");
+        do
+        {
+            printf("Dia: ");
+            scanf("%d", &tur.fec.dia);
+            if (tur.fec.dia > 31 || tur.fec.dia < 1)
+            {
+                printf("Ingrese una fecha valida...\n");
+            }
+        } while ((tur.fec.dia > 31 || tur.fec.dia < 1));
+        do
+        {
+            printf("Mes: ");
+            scanf("%d", &tur.fec.mes);
+            if (tur.fec.mes > 12 || tur.fec.mes < 1)
+            {
+                printf("Ingrese una fecha valida...\n");
+            }
+        } while ((tur.fec.mes > 12 || tur.fec.mes < 1));
+        do
+        {
+            printf("Anio: ");
+            scanf("%d", &tur.fec.anio);
+            if (tur.fec.anio > 2030 || tur.fec.anio < 2023)
+            {
+                printf("Ingrese una fecha valida...\n");
+            }
+        } while ((tur.fec.anio > 2030 || tur.fec.anio < 2023));
+        b = 0;
+        do
+        {
+            printf("Dni del Paciente: ");
+            scanf("%d", &tur.dni);
+            fseek(Parch, sizeof(Pacientes), SEEK_SET);
+            fread(&pac, sizeof(Pacientes), 1, Parch);
+            while (!feof(Parch) && b == 0)
+            {
+                if (tur.dni == pac.dni)
+                {
+                    printf("\n\tBUSCANDO DATOS DEL PACIENTE \n");
+                    system("pause");
+                    printf("Nombre: %s", pac.apenom);
+                    b = 1;
+                }
+                fread(&pac, sizeof(Pacientes), 1, Parch);
+            }
+            if (b == 0)
+            {
+                printf("\n\tBUSCANDO DATOS DEL PACIENTE \n");
+                system("pause");
+                printf("NO SE ENCONTRO EL PACIENTE...\n");
+                printf("Corregir el dni...\n");
+            }
+        } while (b == 0);
+        _flushall();
+        printf("\nDetalles de Atencion: ");
+        gets(tur.detalles);
+        fwrite(&tur, sizeof(Turnos), 1, Tarch);
+        do
+        {
+            printf("\nDesea agendar otro turno? (1 = Si/0 = No)");
+            scanf("%d", &sino);
+            _flushall();
+            if (sino > 1 || sino < 0)
+            {
+                printf("Ingrese una opcion correcta...\n");
+            }
+        } while (sino > 1 || sino < 0);
+    } while (sino == 1);
+}
+
+void listado(FILE *Prof, FILE *Tarch, Profesionales pro, Turnos tur)
+{
+    int b=0;
+    printf("\tLISTADO DE TURNOS POR PROFESIONAL:\n");
+    fseek(Tarch, sizeof(Turnos), SEEK_SET);
+    fread(&tur,sizeof(Turnos),1,Tarch);
+    fseek(Prof, sizeof(Profesionales), SEEK_SET);
+    fread(&pro,sizeof(Profesionales),1,Prof);
+    while(!feof(Tarch)){
+        if(tur.idProf==pro.IdProf){
+            printf("\nID del Profeional: %d ", tur.idProf);
+            printf("\nNombre del Profesional: %s ", pro.apenom);
+            printf("\nFecha del Turno: %d/%d/%d", tur.fec.dia,tur.fec.mes,tur.fec.anio);
+            b=1;
+        }
+        fread(&tur,sizeof(Turnos),1,Tarch);
+        fread(&pro,sizeof(Profesionales),1,Prof);      
+    }
+    if (b==0){
+        printf("\nNo hay turnos programados...\n");
+    }
+    
 }
