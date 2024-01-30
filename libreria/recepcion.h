@@ -32,7 +32,7 @@ struct Profesionales
     char apenom[60], tel[25];
     int dni, IdProf;
 };
-    FILE *Parch, *Tarch, *Prof;
+    FILE *Parch, *Tarch, *Prof,*usuarios;
     Pacientes pac;
     Turnos tur;
     Profesionales pro;
@@ -55,8 +55,6 @@ int menu(void){
     return opcion;
 }
 //Inicio de sesion
-    FILE *usuarios;
-    usuario us;
 void inicioSesion(FILE *usuarios, usuario us){
     system("cls");
     char mail[100], cont[10];

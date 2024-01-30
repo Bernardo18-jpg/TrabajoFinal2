@@ -3,10 +3,6 @@
 #include <string.h>
 #include <conio.h>
 #include <recepcion.h>
-
-
-
-
 main()
 {
     int opcion;
