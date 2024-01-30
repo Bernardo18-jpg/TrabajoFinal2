@@ -198,7 +198,7 @@ bool verifContrase(char contra[10], FILE *Usua, Usuarios usu)
         {
             cminus++;
         }
-        if (contra[i] <= '0' && contra[i] >= 'z')
+        if (((contra[i] < 'a' || contra[i] > 'z') && (contra[i] < 'A' || contra[i] > 'Z') && (contra[i] < '0' || contra[i] > '9')))
         {
             printf("Contrasena incorrecta...SOLO CARACTERES ALFANUMERICOS\n");
             b = true;
