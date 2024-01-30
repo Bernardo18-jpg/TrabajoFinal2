@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+//gol
 struct Profesionales
 {
     char apenom[60], tel[25];
