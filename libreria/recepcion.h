@@ -7,7 +7,10 @@ struct fecha
 {
     int dia, mes, anio;
 };
-
+struct usuario{
+    char mail[100];
+    char cont[10];
+};
 struct Pacientes
 {
     char apenom[60];
@@ -17,7 +20,6 @@ struct Pacientes
     fecha fec;
     char tel[25];
 };
-
 struct Turnos
 {
     int idProf;
@@ -25,7 +27,6 @@ struct Turnos
     int dni;
     char detalles[380];
 };
-
 struct Profesionales
 {
     char apenom[60], tel[25];
@@ -36,7 +37,7 @@ struct Profesionales
     Turnos tur;
     Profesionales pro;
     fecha fec;
-
+    usuario us;
     //MENU
 int menu(void){
     int opcion;
@@ -52,7 +53,40 @@ int menu(void){
     scanf("%d", &opcion);
     _flushall();
     return opcion;
-   
+}
+//Inicio de sesion
+    FILE *usuarios;
+    usuario us;
+void inicioSesion(FILE *usuarios, usuario us){
+    system("cls");
+    char mail[100], cont[10];
+    bool encontrado=false;
+    usuarios=fopen("Usuarios.dat", "r+b");
+    if(usuarios==NULL){
+        printf("\nARCHIVO NO ENCONTRADO\n");
+        printf("\nCARGUE USUARIOS EN EL PANEL ADMINISTRATIVO\n");
+        
+    }else{
+        printf("\nIngrese usuario\n");
+        gets(mail);_flushall();
+        printf("\nIngrese contraseña\n");
+        gets(cont);_flushall();
+        fread(&us,sizeof(usuario),1,usuarios);
+    while(!feof(usuarios)){
+        if(us.mail==mail&&us.cont==cont){
+            printf("\nUSUARIO ENCONTRADO\n");
+            encontrado=true;
+            fseek(usuarios,sizeof(usuario),SEEK_END);
+        }else{
+            fread(&us,sizeof(usuario),1,usuarios);
+        }
+    }
+    if(encontrado==false){
+        printf("");
+    }
+    fclose(usuarios);
+    }
+
 }
 //PACIENTES
 void pacientes(FILE *Parch, Pacientes pac, fecha fec)

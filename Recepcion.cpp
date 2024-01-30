@@ -11,11 +11,11 @@ main()
 {
     int opcion;
     do{
-        opcion=menu();
-        switch (opcion)
-        {
+    opcion=menu();
+    switch (opcion)
+    {
         case 1:
-
+            inicioSesion(usuarios,us);
             break;
         case 2:
             system("cls");
