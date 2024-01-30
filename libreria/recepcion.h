@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <conio.h>
 
 struct fecha
 {
@@ -30,88 +31,49 @@ struct Profesionales
     char apenom[60], tel[25];
     int dni, IdProf;
 };
-
-void pacientes(FILE *Parch, Pacientes pac, fecha fec);
-void turnoss(FILE *Tarch, FILE *Parch, FILE *Prof, Pacientes pac, fecha fec, Turnos tur, Profesionales pro);
-void listado(FILE *Prof, FILE *Tarch, Profesionales pro, Turnos tur);
-
-main()
-{
     FILE *Parch, *Tarch, *Prof;
-    int opcion;
     Pacientes pac;
     Turnos tur;
     Profesionales pro;
     fecha fec;
-    Parch = fopen("Pacientes.dat", "a+b");
-    if (Parch == NULL)
-    {
-        printf("\nError al abrir el archivo\n");
-        exit(1);
-    }
 
-    Tarch = fopen("Turnos.dat", "a+b");
-    if (Tarch == NULL)
-    {
-        printf("\nError al abrir el archivo\n");
-        exit(1);
-    }
-
-    Prof = fopen("Profesionales.dat", "rb");
-    if (Prof == NULL)
-    {
-        printf("\nError al abrir el archivo\n");
-        exit(1);
-    }
-
-    do
-    {
-        system("cls");
-        printf("\n\tModulo del Recepcionista");
-        printf("\n\n\t========================");
-        printf("\n\n\t1. Iniciar sesion");
-        printf("\n\n\t2. Registrar Pacientes");
-        printf("\n\n\t3. Agendar Turnos");
-        printf("\n\n\t4. Listado de Atenciones por Profesional y Fecha");
-        printf("\n\n\t5. SALIR");
-        printf("\n\n\tINGRESE SU OPCION: ");
-        scanf("%d", &opcion);
-        _flushall();
-        switch (opcion)
-        {
-        case 1:
-
-            break;
-        case 2:
-            system("cls");
-            printf("\tRegistrar Pacientes");
-            pacientes(Parch, pac, fec);
-            break;
-        case 3:
-            system("cls");
-            printf("\tAgendar Turnos");
-            turnoss(Tarch, Parch, Prof, pac, fec, tur, pro);
-            break;
-        case 4:
-            listado(Prof, Tarch, pro, tur);
-            break;
-        case 5:
-            printf("\n\nUsted esta cerrando la aplicacion...\n");
-            break;
-        default:
-            printf("\nNO ES UNA OPCION CORRECTA...");
-            break;
-        }
-        printf("\n\n");
-        system("pause");
-    } while (opcion != 5);
-    fclose(Parch);
-    fclose(Tarch);
+    //MENU
+int menu(void){
+    int opcion;
+    system("cls");
+    printf("\n\tModulo del Recepcionista");
+    printf("\n\n\t========================");
+    printf("\n\n\t1. Iniciar sesion");
+    printf("\n\n\t2. Registrar Pacientes");
+    printf("\n\n\t3. Agendar Turnos");
+    printf("\n\n\t4. Listado de Atenciones por Profesional y Fecha");
+    printf("\n\n\t5. SALIR");
+    printf("\n\n\tINGRESE SU OPCION: ");
+    scanf("%d", &opcion);
+    _flushall();
+    return opcion;
+   
 }
-
+//PACIENTES
 void pacientes(FILE *Parch, Pacientes pac, fecha fec)
 {
-    int sino = 0;
+    int sino = 0,c;
+    Parch=fopen("Pacientes.dat","r+b");
+    system("cls");
+    if(Parch==NULL){
+        printf("El archivo pacientes no existe");
+        printf("\nDesea crear el archivo? (S/N):  "); 
+         c=getch();
+        if(c=='s'||c=='S'){
+            Parch=fopen("Pacientes.dat","w+b");
+            printf("\nARCHIVO CREADO\n");
+            _flushall();
+        }
+    }else{
+        printf("\nARCHIVO YA EXISTENTE\n");
+        Parch=fopen("Pacientes.dat","a+b");
+    }
+    
     fwrite(&pac, sizeof(Pacientes), 1, Parch);
     do
     {
