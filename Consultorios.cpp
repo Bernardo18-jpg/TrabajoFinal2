@@ -52,8 +52,8 @@ fecha turno(){
 
 
 bool iniciarsesion(FILE *arch);
-bool validacionusuario(FILE *arch,char Contrasena[32],char Usuario[10]);
-bool verificacioncontrasena(FILE *arch,char Contrasena[32]);
+bool validacionusuario(FILE *arch,char Contrasena[10],char Usuario[10]);
+bool verificacioncontrasena(FILE *arch,char Contrasena[10]);
 void Lista(FILE *pac,FILE *turn);
 
 main(){
@@ -63,7 +63,7 @@ main(){
 	bool b = false;
 	char historia_clinica;
 	
-	arch=fopen("Recepcionista.dat","r+b");
+	arch=fopen("Usuarios.dat","r+b");
 	pac=fopen("Pacientes.dat","r+b");
 	turn=fopen("Turnos.dat","r+b");
 	med=fopen("HistoriaClinica.dat","a+b");
@@ -84,8 +84,8 @@ main(){
 		
 		case 1:
 			
-			b = iniciarsesion(turn);
-			
+			b = iniciarsesion(arch);
+			printf("USER");
 			break;
 			
 		case 2:
@@ -103,9 +103,9 @@ main(){
 			
 		case 3:
 			
-			
+		
 			break;
-			
+				
 		case 4:
 			
 			break;
@@ -138,7 +138,6 @@ bool iniciarsesion(FILE *arch)
 	scanf("%s",&Contrasena);
 	
 	b = validacionusuario(arch,Contrasena,Usuario);
-	
 	return b;
 
 }
@@ -148,15 +147,18 @@ bool validacionusuario(FILE *arch,char Contrasena[32],char Usuario[10])
 
 	bool B=false,Band=false;
 
-	
+				rewind(arch);
+				
 				fread(&User,sizeof(Usuarios),1,arch);
 				
 				while(!feof(arch) && Band == false)
 				{
-					if(strcmp(User.Usuario, Usuario) == 0)
+						
+					if(strcmp(User.Usuario,Usuario)==0)
 					{
 						Band = true;
 					}
+					
 					fread(&User,sizeof(Usuarios),1,arch);
 				}
 			
@@ -164,14 +166,10 @@ bool validacionusuario(FILE *arch,char Contrasena[32],char Usuario[10])
 				{
   		 		       printf("Usuario no encontrado...\n");
 			   	}
-		
-		
-        
-
-   	if (Band == true)
-	{
-   	  B = verificacioncontrasena(arch,Contrasena);
-   	}
+				else
+				{
+   	  				B = verificacioncontrasena(arch,Contrasena);
+   				}
 
    	
    	return B;
@@ -184,7 +182,12 @@ bool verificacioncontrasena(FILE *arch,char Contrasena[32])
 	int min=0,may=0,num=0,i=0;
 	bool B=false;
 
-	fseek(arch,-sizeof(Usuarios),SEEK_CUR);
+	const long int tamanio = sizeof(Usuarios);
+	
+	fseek(arch,-tamanio,SEEK_CUR);
+	fseek(arch,-tamanio,SEEK_CUR);
+	
+	fread(&User,sizeof(Usuarios),1,arch);
 	
 		
 			if(strcmp(User.Contrasena,Contrasena)!=0)
