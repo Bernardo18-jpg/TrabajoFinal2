@@ -103,7 +103,8 @@ main(){
 			
 		case 3:
 			
-		
+			
+			break;
 			
 		case 4:
 			
