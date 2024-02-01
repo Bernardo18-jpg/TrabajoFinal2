@@ -55,6 +55,7 @@ int menu(void){
     return opcion;
 }
 //Inicio de sesion
+
 void inicioSesion(FILE *usuarios, usuario us){
     system("cls");
     char mail[100], cont[10];
@@ -63,7 +64,6 @@ void inicioSesion(FILE *usuarios, usuario us){
     if(usuarios==NULL){
         printf("\nARCHIVO NO ENCONTRADO\n");
         printf("\nCARGUE USUARIOS EN EL PANEL ADMINISTRATIVO\n");
-        
     }else{
         printf("\nIngrese usuario\n");
         gets(mail);_flushall();
