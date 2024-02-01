@@ -182,8 +182,8 @@ bool verificacioncontrasena(FILE *arch,char Contrasena[32])
 	int min=0,may=0,num=0,i=0;
 	bool B=false;
 
-	const long int tamanio = sizeof(Usuarios);
-	
+	const long int tamanio = 2*sizeof(Usuarios);
+
 	fseek(arch,-tamanio,SEEK_CUR);
 	fseek(arch,-tamanio,SEEK_CUR);
 	
