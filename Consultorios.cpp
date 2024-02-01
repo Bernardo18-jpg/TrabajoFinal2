@@ -85,7 +85,7 @@ main(){
 		case 1:
 			
 			b = iniciarsesion(arch);
-			printf("USER");
+	
 			break;
 			
 		case 2:
@@ -170,7 +170,6 @@ bool validacionusuario(FILE *arch,char Contrasena[32],char Usuario[10])
 				{
    	  				B = verificacioncontrasena(arch,Contrasena);
    				}
-
    	
    	return B;
 
@@ -180,9 +179,10 @@ bool verificacioncontrasena(FILE *arch,char Contrasena[32])
 {
 	
 	int min=0,may=0,num=0,i=0;
+	
 	bool B=false;
 
-	const long int tamanio = 2*sizeof(Usuarios);
+	const long int tamanio = sizeof(Usuarios);
 
 	fseek(arch,-tamanio,SEEK_CUR);
 	fseek(arch,-tamanio,SEEK_CUR);
