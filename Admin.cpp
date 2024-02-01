@@ -22,13 +22,10 @@ bool verifContrase(char contra[10], FILE *Usua, Usuarios usu);
 
 main()
 {
-    FILE *Prof, *Usua;
     int opcion;
-    Profesionales pro;
-    Usuarios usu;
-    Prof = fopen("Profesionales.dat", "a+b");
-    Usua = fopen("Usuarios.dat", "a+b");
-    if (Prof == NULL)
+    do{
+    opcion=menu();
+    switch (opcion)
     {
         printf("\nError al abrir el archivo Profesionales\n");
         exit(1);
@@ -126,23 +123,9 @@ bool verifUsuario(char usuar[10], FILE *Usua, Usuarios usu)
             printf("Usuario incorrecto...YA EXISTE %s\n", usuar);
             b = true;
         }
-        fread(&usu, sizeof(Usuarios), 1, Usua);
-    }
-    if (strlen(usuar) < 6)
-    {
-        printf("Usuario incorrecto...DEMASIADO CORTO\n");
-        b = true;
-    }
-    else if (strlen(usuar) > 10)
-    {
-        printf("Usuario incorrecto...DEMASIADO LARGO\n");
-        b = true;
-    }
-    if (usuar[0] < 'a' || usuar[0] > 'z')
-    {
-        printf("Usuario incorrecto...INICIAR EN MINUSCULA\n");
-        b = true;
-    }
+        printf("\n\n");
+        system("pause");
+    } while (opcion != 5);
 
     for (int i = 1; i < strlen(usuar); i++)
     {
