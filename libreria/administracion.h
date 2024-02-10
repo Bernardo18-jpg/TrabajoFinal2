@@ -254,12 +254,7 @@ void usuarios(FILE *Usua, Usuarios usu)
             sino=getch();_flushall();
         }
     } while (sino=='s'|| sino=='S');
-<<<<<<< HEAD
     fclose(Usua);
 }
-=======
-    }
-
->>>>>>> 0ccf6e642f2468f321bfb5064d3277cc59671e0a
 
 
