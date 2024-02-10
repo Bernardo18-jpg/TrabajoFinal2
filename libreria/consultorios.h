@@ -161,11 +161,11 @@ void Lista(FILE *pac, FILE *turn) {
     fecha hoy;
     system("cls");
     pac=fopen("Pacientes.dat","r+b");
-    if(arch==NULL){
+    if(pac==NULL){
         printf("\nARCHIVO NO ENCONTRADO\n");
         printf("\nCARGUE PACIENTES EN EL PANEL ADMINISTRATIVO\n");
     }else{
-    hoy = turno();
+	    hoy = turno();
 
     printf("TURNO\t PACIENTE \t\t\t DNI \t\t\t\t \n");
 
