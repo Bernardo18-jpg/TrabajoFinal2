@@ -1,107 +1,44 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <conio.h>
 
+struct fecha
+{
+    int dia, mes, anio;
+};
 struct Profesionales
 {
     char apenom[60], tel[25];
-    int dni, IdProf;
+    int dni, IdProf, atencion;
 };
-
 struct Usuarios
 {
     char apenom[60];
     char usuario[10];
     char contrase[10];
 };
+struct Atencion
+{
+    int cant;
+    fecha fec;
+};
+
 int menu(void){
     int opcion;
     system("cls");
-    printf("\n\tModulo del Recepcionista");
+    printf("\n\tModulo Administracion");
     printf("\n\n\t========================");
-    printf("\n\n\t1. Iniciar sesion");
-    printf("\n\n\t2. Registrar Pacientes");
-    printf("\n\n\t3. Agendar Turnos");
-    printf("\n\n\t4. Listado de Atenciones por Profesional y Fecha");
+    printf("\n\n\t1. Registrar Profesionales");
+    printf("\n\n\t2. Registrar usuario recepcionista");
+    printf("\n\n\t3. Atencion por Profesional");
+    printf("\n\n\t4. Ranking de Profesionales por Atenciones");
     printf("\n\n\t5. SALIR");
     printf("\n\n\tINGRESE SU OPCION: ");
     scanf("%d", &opcion);
     _flushall();
     return opcion;
 }
-FILE *Prof;
-Profesionales pro;
-void profesionales(FILE *Prof, Profesionales pro)
-{
-    int sino = 0;
-    fwrite(&pro, sizeof(Profesionales), 1, Prof);
-    do
-    {
-        printf("\n\n\tIngreso de datos del Profesional:\n\n");
-        printf("Apellido y Nombre: ");
-        gets(pro.apenom);
-        printf("Id del profesional: ");
-        scanf("%d", &pro.IdProf);
-        printf("DNI: ");
-        scanf("%d", &pro.dni);
-        _flushall();
-        printf("Numero de telefono: ");
-        gets(pro.tel);
-        fwrite(&pro, sizeof(Profesionales), 1, Prof);
-        do
-        {
-            printf("\nDesea agregar otro profesional? (1 = Si/0 = No)");
-            scanf("%d", &sino);
-            _flushall();
-            if (sino > 1 || sino < 0)
-            {
-                printf("Ingrese una opcion correcta...\n");
-            }
-        } while (sino > 1 || sino < 0);
-    } while (sino == 1);
-}
-FILE *Usua;
-Usuarios usu;
-void usuarios(FILE *Usua, Usuarios usu)
-{
-    int sino = 0;
-    char usuar[10], contra[10];
-    bool u, c;
-    fwrite(&usu, sizeof(Usuarios), 1, Usua);
-    do
-    {
-        _flushall();
-        printf("\n\n\tNuevo Usuario:\n\n");
-        printf("Apellido y Nombre: ");
-        gets(usu.apenom);
-        do
-        {
-            printf("Usuario: ");
-            gets(usuar);
-            u = verifUsuario(usuar, Usua, usu);
-        } while (u == true);
-        do
-        {
-            printf("Contrasena: ");
-            gets(contra);
-            c = verifContrase(contra, Usua, usu);
-        } while (c == true);
-        strcpy(usu.usuario, usuar);
-        strcpy(usu.contrase, contra);
-        fwrite(&usu, sizeof(Usuarios), 1, Usua);
-        do
-        {
-            printf("\nDesea agregar otro Usuario? (1 = Si/0 = No): ");
-            scanf("%d", &sino);
-            _flushall();
-            if (sino > 1 || sino < 0)
-            {
-                printf("Ingrese una opcion correcta...\n");
-            }
-        } while (sino > 1 || sino < 0);
-    } while (sino == 1);
-}
-
 bool verifUsuario(char usuar[10], FILE *Usua, Usuarios usu)
 {
     bool b = false;
@@ -151,7 +88,7 @@ bool verifUsuario(char usuar[10], FILE *Usua, Usuarios usu)
     }
     if (cmayus < 2)
     {
-        printf("Usuario incorrecto...ALMENOS DOS MAYUSCULAS\n");
+        printf("Usuario incorrecto...MINIMO DOS MAYUSCULAS\n");
         b = true;
     }
     return b;
@@ -222,3 +159,114 @@ bool verifContrase(char contra[10], FILE *Usua, Usuarios usu)
 
     return b;
 }
+FILE *Prof;
+Profesionales pro;
+Usuarios usu;
+void profesionales(FILE *Prof, Profesionales pro, Usuarios usu)
+{
+    int sino,c;
+    Prof=fopen("Profesionales.dat", "r+b");
+    system("cls");
+    if(Prof==NULL){
+        printf("El archivo Profesionales no existe");
+        printf("\nDesea crear el archivo? (S/N):  "); 
+        c=getch();
+        if(c=='s'||c=='S'){
+            Prof=fopen("Profesionales.dat","w+b");
+            printf("\nARCHIVO CREADO\n");
+        }
+    }else{
+        printf("\nARCHIVO YA EXISTENTE\n");
+        Prof=fopen("Profesionales.dat","a+b");
+    }
+    do
+    {
+        fread(&pro, sizeof(Profesionales), 1, Prof);
+        printf("\n\n\tIngreso de datos del Profesional:\n\n");
+        printf("\nApellido y Nombre: ");
+        gets(pro.apenom);
+        usu.apenom=pro.apenom;
+        printf("\nId del profesional: ");
+        scanf("%d", &pro.IdProf);_flushall();
+        usu.usuario=pro.IdProf;
+        printf("\nDNI: ");
+        scanf("%d", &pro.dni);_flushall();     
+        usu.contrase=pro.dni;   
+        printf("\nNumero de telefono: ");
+        gets(pro.tel);
+        pro.atencion=0;
+        fwrite(&pro, sizeof(Profesionales), 1, Prof);
+        fwrite(&usu, sizeof(Usuarios), 1, Prof);
+        printf("\nDesea cargar otro Profesional? (S/N):  "); 
+        sino=getch();_flushall();
+        while(sino!='s'&& sino!='S'&&sino!='n'&& sino!='N'){
+            printf("\nIngrese una opcion correcta\n");
+            printf("\nDesea cargar otro Profesional? (S/N):  "); 
+            sino=getch();_flushall();
+        }
+    } while (sino=='s'|| sino=='S');
+}
+FILE *Usua;
+void usuarios(FILE *Usua, Usuarios usu)
+{   
+    int sino = 0,a;
+    char usuar[10], contra[10];
+    bool u, c;
+    Usua=fopen("Recepcionistas.dat", "r+b");
+    system("cls");
+    if(Usua==NULL){
+        printf("El archivo Recepcionistas no existe");
+        printf("\nDesea crear el archivo? (S/N):  "); 
+        c=getch();
+        if(a=='s'||a=='S'){
+            Usua=fopen("Recepcionistas.dat","w+b");
+            printf("\nARCHIVO CREADO\n");
+        }
+    }else{
+        printf("\nARCHIVO YA EXISTENTE\n");
+        Prof=fopen("Profesionales.dat","a+b");
+    }
+    do
+    {
+        fread(&usu, sizeof(Usuarios), 1, Usua);
+        _flushall();
+        printf("\n\n\tNuevo Usuario:\n\n");
+        printf("Apellido y Nombre: ");
+        gets(usu.apenom);
+        do
+        {
+            printf("\nUsuario: ");
+            gets(usuar);
+            u = verifUsuario(usuar, Usua, usu);
+        } while (u == true);
+        do
+        {
+            printf("\nContrasena: ");
+            gets(contra);
+            c = verifContrase(contra, Usua, usu);
+        } while (c == true);
+        strcpy(usu.usuario, usuar);
+        strcpy(usu.contrase, contra);
+        fwrite(&usu, sizeof(Usuarios), 1, Usua);
+        printf("\nDesea cargar otro Usuario? (S/N):  "); 
+        sino=getch();_flushall();
+        while(sino!='s'&& sino!='S'&&sino!='n'&& sino!='N'){
+            printf("\nIngrese una opcion correcta\n");
+            printf("\nDesea cargar otro Usuario? (S/N):  "); 
+            sino=getch();_flushall();
+        }
+    } while (sino=='s'|| sino=='S');
+}
+FILE *Atencion;
+Atencion aten;
+void atencion(FILE *Atencion, Atencion aten)
+{
+    printf("De que profesional desea ingresar la cantidad de atenciones? ");
+    printf("Ingrese el Id del profesional: ");
+    scanf("%d",&)
+}
+void ranking()
+{
+    
+}
+
