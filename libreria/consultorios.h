@@ -54,6 +54,13 @@ fecha turno(){
 	return aux;
     }
 }
+<<<<<<< HEAD
+=======
+
+bool validacionusuario(FILE *arch,char Contrasena[32],char Usuario[10]);
+bool verificacioncontrasena(FILE *arch,char Contrasena[32]); 
+
+>>>>>>> 0ccf6e642f2468f321bfb5064d3277cc59671e0a
 int menu(void){
     int opcion;
     system("cls");

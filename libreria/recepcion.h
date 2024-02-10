@@ -167,6 +167,48 @@ void pacientes(FILE *Parch, Pacientes pac, fecha fec)
 void turnoss(FILE *Tarch, FILE *Parch, FILE *Prof, Pacientes pac, fecha fec, Turnos tur, Profesionales pro)
 {
     int sino = 0, b = 0;
+    int c;
+
+    Parch=fopen("Pacientes.dat","r+b");
+    Prof=fopen("Profesionales.dat","r+b");
+    Tarch=fopen("Turnos.dat","r+b");
+
+
+     if(Parch==NULL){
+        printf("El archivo Pacientes no existe");
+        system("pause");
+        system("cls");
+        exit(-1);
+
+    }else{
+        printf("\nARCHIVO CARGADO CORRECTAMENTE\n");
+        Parch=fopen("Pacientes.dat","r+b");
+    }
+       
+     if(Prof==NULL){
+        printf("El archivo Profesionales no existe");
+        system("pause");
+        system("cls");
+         exit(-1);
+    }else{
+        printf("\nARCHIVO CARGADO CORRECTAMENTE\n");
+        Prof=fopen("Profesionales.dat","r+b");
+    }
+     if(Tarch==NULL){
+
+        printf("El archivo Turnos no existe");
+        printf("\nDesea crear el archivo? (S/N):  "); 
+        c=getch();
+
+        if(c=='s'||c=='S'){
+            Tarch=fopen("Turnos.dat","w+b");
+            printf("\nARCHIVO CREADO\n");
+        }
+    }else{
+        printf("\nARCHIVO YA EXISTENTE\n");
+        Tarch=fopen("Turnos.dat","a+b");
+    }
+
     fwrite(&tur, sizeof(Turnos), 1, Tarch);
     do
     {
@@ -266,7 +308,6 @@ void turnoss(FILE *Tarch, FILE *Parch, FILE *Prof, Pacientes pac, fecha fec, Tur
         } while (sino > 1 || sino < 0);
     } while (sino == 1);
 }
-
 void listado(FILE *Prof, FILE *Tarch, Profesionales pro, Turnos tur)
 {
     int b=0;

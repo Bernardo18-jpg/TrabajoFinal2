@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <administracion.h>
+
 main()
 {
     int opcion;

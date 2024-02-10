@@ -36,6 +36,11 @@ bool verifUsuario(char usuar[10], FILE *Usua, Usuarios usu)
     int cdigit = 0, cmayus = 0;
     fseek(Usua, sizeof(Usuarios), SEEK_SET);
     fread(&usu, sizeof(Usuarios), 1, Usua);
+
+    if(Usua!=0){
+
+    fseek(Usua, sizeof(Usuarios), SEEK_SET);
+    fread(&usu, sizeof(Usuarios), 1, Usua);
     while (!feof(Usua))
     {
         if ((strcmp(usu.usuario, usuar) == 0))
@@ -45,6 +50,8 @@ bool verifUsuario(char usuar[10], FILE *Usua, Usuarios usu)
         }
         fread(&usu, sizeof(Usuarios), 1, Usua);
     }
+    }
+    
     if (strlen(usuar) < 6)
     {
         printf("Usuario incorrecto...DEMASIADO CORTO\n");
@@ -199,7 +206,24 @@ void usuarios(FILE *Usua, Usuarios usu)
     int sino = 0;
     char usuar[10], contra[10];
     bool u, c;
-    
+    Usua=fopen("Usuarios.dat","a+b");
+
+//     if(Usua==NULL){
+
+   //     printf("El archivo Usuarios no existe");
+    //    printf("\nDesea crear el archivo? (S/N):  "); 
+     //   c=getch();
+
+     ///   if(c=='s'||c=='S'){
+
+       //     Usua=fopen("Usuarios.dat","w+b");
+        //    printf("\nARCHIVO CREADO\n");
+       // }
+    //}else{
+
+      //  printf("\nARCHIVO CARGADO CORRECTAMENTE\n");
+      //  Usua=fopen("Usuarios.dat","a+b");
+   // }
     do
     {
         fread(&usu, sizeof(Usuarios), 1, Usua);
@@ -230,7 +254,12 @@ void usuarios(FILE *Usua, Usuarios usu)
             sino=getch();_flushall();
         }
     } while (sino=='s'|| sino=='S');
+<<<<<<< HEAD
     fclose(Usua);
 }
+=======
+    }
+
+>>>>>>> 0ccf6e642f2468f321bfb5064d3277cc59671e0a
 
 
