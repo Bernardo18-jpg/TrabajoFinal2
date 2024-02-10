@@ -190,6 +190,7 @@ void profesionales(FILE *Prof, Profesionales pro)
             sino=getch();_flushall();
         }
     } while (sino=='s'|| sino=='S');
+    fclose(Prof);
 }
 FILE *Usua;
 Usuarios usu;
@@ -229,6 +230,7 @@ void usuarios(FILE *Usua, Usuarios usu)
             sino=getch();_flushall();
         }
     } while (sino=='s'|| sino=='S');
+    fclose(Usua);
 }
 
 

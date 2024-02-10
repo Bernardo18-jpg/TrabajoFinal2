@@ -14,7 +14,6 @@ main(){
 			b = iniciarsesion(arch);
 			break;
 		case 2:
-
 			if(b == true)
 			{
 				Lista(pac,turn);
@@ -23,7 +22,6 @@ main(){
 			{
 				printf("Porfavor Inicie sesion antes de relizar esta operacion...\n");
 			}
-		 
 			break;
 			
 		case 3:
