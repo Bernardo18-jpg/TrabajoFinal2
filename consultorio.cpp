@@ -54,9 +54,10 @@ fecha turno(){
 	return aux;
     }
 }
-
+bool iniciarsesion(FILE *arch);
 bool validacionusuario(FILE *arch,char Contrasena[32],char Usuario[10]);
 bool verificacioncontrasena(FILE *arch,char Contrasena[32]); 
+void Lista(FILE *pac, FILE *turn);
 
 int menu(void){
     int opcion;
@@ -73,8 +74,51 @@ int menu(void){
     _flushall();
     return opcion;
 }
-	char historia_clinica;
-	//med=fopen("HistoriaClinica.dat","a+b");
+
+main(){
+	bool b = true;
+	int opcion;
+	do{
+	opcion=menu();
+	system("cls");
+	switch(opcion){
+		case 1:
+			b = iniciarsesion(arch);
+			break;
+		case 2:
+
+			if(b == true)
+			{
+				Lista(pac,turn);
+			}
+			else
+			{
+				printf("Porfavor Inicie sesion antes de relizar esta operacion...\n");
+			}
+		 
+			break;
+			
+		case 3:
+			
+		
+			break;
+				
+		case 4:
+			
+			break;
+			
+		default:
+			
+			printf("Ingrese un opcion CORRECTA porfavor...\n");
+			break;
+	}
+	system("pause");
+	system("cls");
+	}while(opcion!=4);
+	
+	 
+}
+
 bool iniciarsesion(FILE *arch){
     system("cls");
     arch=fopen("Usuarios.dat","r+b");
@@ -133,7 +177,7 @@ bool validacionusuario(FILE *arch,char Contrasena[32],char Usuario[10])
 bool verificacioncontrasena(FILE *arch,char Contrasena[32])
 {
 	
-	int min=0,may=0,num=0,i=0;
+	
 	bool B=false;
 
 	const long int tamanio = sizeof(Usuarios);
@@ -165,18 +209,6 @@ void Lista(FILE *pac, FILE *turn) {
     Turnos aux2;
     fecha hoy;
     system("cls");
-    pac=fopen("Pacientes.dat","r+b");
-  /*  if(pac==NULL){
-        printf("\nARCHIVO NO ENCONTRADO\n");
-        printf("\nCARGUE PACIENTES EN EL PANEL ADMINISTRATIVO\n");
-    }else{
-	*/
-    hoy = turno();
-
-    printf("TURNO\t PACIENTE \t\t\t DNI \t\t\t\t \n");
-
-    fread(&aux, sizeof(Pacientes), 1, pac);
-    fread(&aux2, sizeof(Turnos), 1, turn);
 
     while (!feof(turn)) {
         if (hoy.anio == aux2.fec.anio && hoy.mes == aux2.fec.mes && hoy.dia == aux2.fec.dia) {
