@@ -1,8 +1,7 @@
-#include <stdio.h>
+it #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctime>
-#include <consultorios.h>
 main(){
 	bool b = false;
 	int opcion;

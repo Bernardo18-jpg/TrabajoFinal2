@@ -32,6 +32,8 @@ struct Pacientes
     fecha fec;
     char tel[25];
 };
+bool validacionusuario(FILE *arch,char Contrasena[32],char Usuario[10]);
+
 FILE *arch,*pac,*turn,*med;
 Usuarios User;
 
@@ -161,7 +163,7 @@ void Lista(FILE *pac, FILE *turn) {
     fecha hoy;
     system("cls");
     pac=fopen("Pacientes.dat","r+b");
-    if(arch==NULL){
+    if(pac==NULL){
         printf("\nARCHIVO NO ENCONTRADO\n");
         printf("\nCARGUE PACIENTES EN EL PANEL ADMINISTRATIVO\n");
     }else{
